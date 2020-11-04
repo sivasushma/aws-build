@@ -1,0 +1,61 @@
+[
+    {
+        "displayName": "Customer ID",
+        "access": "customer_id",
+        "type": "string"
+    },
+    {
+        "displayName": "Customer Status",
+        "access": "status",
+        "type": "string"
+    },
+    {
+        "displayName": "Customer Name",
+        "access": "name",
+        "type": "string"
+    },
+    {
+        "displayName": "Customer PAN",
+        "access": "pan",
+        "type": "string"
+    },
+    {
+        "displayName": "Customer TAN",
+        "access": "tan",
+        "type": "string"
+    },
+    {
+        "displayName": "Customer Address Line 1",
+        "access": "address_line_1",
+        "type": "string"
+    },
+    {
+        "displayName": "Customer Address Line 2",
+        "access": "address_line_2",
+        "type": "string"
+    },
+    {
+        "displayName": "Customer Address Line 3",
+        "access": "address_line_3",
+        "type": "string"
+    },
+    {
+        "displayName": "Customer City",
+        "access": "city",
+        "type": "string"
+    },
+    {
+        "displayName": "Customer Pincode",
+        "access": "pincode",
+        "type": "string"
+    },
+    {
+        "displayName": "Customer State",
+        "access": "state",
+        "type": "string"
+    },
+    {
+        "displayName": "Customer Country",
+        "access": "country",
+        "type": "string"
+    }]

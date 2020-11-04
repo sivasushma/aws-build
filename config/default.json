@@ -1,0 +1,21 @@
+{
+  "database":{
+    "url": "mongodb://db/FRT"
+  },
+  "v1_base_path": "/api/v1/user-management",
+  "notifications":{
+    "url": "http://notification-service:3000/api/v1/notifications",
+    "welcome":{
+      "subject": "Account created - FRT Support",
+      "template_name": "welcome_email"
+    },
+    "otp":{
+      "subject": "OTP Verification Code - FRT Support",
+      "template_name": "email_otp"
+    },
+    "new_password": {
+      "subject": "New password - FRT Support",
+      "template_name" : "new_password"
+    }
+  }
+}

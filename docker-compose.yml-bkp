@@ -1,0 +1,75 @@
+version: "3"
+services:
+  db:
+    image: mongo:4.2
+    restart: always
+    container_name: frt_qa_db
+    # volumes:
+    #   - /data/db:/data/db
+    #   - /data/keys:/data/keys
+    # ports:
+    #   - "27018:27017"
+
+  # notification-service:
+  #   image: registry.gitlab.com/pricewaterhousecoopers/notification-service:latest
+  #   container_name: cmd_notification_service
+  #   restart: always
+  #   command: bash -c "./wait-for-it.sh --timeout=0 db:27017 && yarn run server"
+  #   depends_on:
+  #     - db
+  #   links:
+  #     - db
+  #   stdin_open: true
+  #   tty: true
+  #   environment:
+  #     SMTP_FROM: infiniqo@wavelabs.in
+  #     SMTP_USER: infiniqo@wavelabs.in
+  #     SMTP_PASSWORD: 5m+p@786
+  #     LOGIN_URL: http://frtqa.wavelabs.in/login
+
+  dev-app:
+    build: .
+    image: docker.pkg.github.com/frtinc/sentinal_tms_user_mgnt_api/qa:latest
+    container_name: user_management_dev
+    restart: always
+    command: bash -c "./wait-for-it.sh --timeout=0 db:27017 && npm run start-dev"
+    volumes:
+      #   - .:/app
+      - ./dist:/app/dist
+      - ./reports:/app/reports
+      - ./coverage:/app/coverage
+    # ports:
+    #   - "3002:3200"
+    depends_on:
+      - db
+    links:
+      - db
+    stdin_open: true
+    tty: true
+    environment:
+      CROSS_ORIGIN: https://frtqa.wavelabs.in
+      ASSET_HOST: https://frtqa.wavelabs.in
+      DEFAULT_OTP: 33399
+      DB_URL: mongodb://db/FRT
+
+  prod-app:
+    build:
+      context: .
+      dockerfile: ./prod/Dockerfile
+    image: docker.pkg.github.com/frtinc/sentinal_tms_user_mgnt_api/qa:latest
+    container_name: qa_user_management
+    restart: always
+    command: bash -c "./wait-for-it.sh --timeout=0 db:27017 && npm run start-prod"
+    depends_on:
+      - db
+      # - notification-service
+    links:
+      - db
+      # - notification-service
+    stdin_open: true
+    tty: true
+    environment:
+      CROSS_ORIGIN: https://frtqa.wavelabs.in
+      ASSET_HOST: https://frtqa.wavelabs.in
+      DEFAULT_OTP: 33399
+      DB_URL: mongodb://db/FRT

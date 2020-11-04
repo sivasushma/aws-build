@@ -1,0 +1,76 @@
+node('frt-qa') {
+// node('pwc-stagging') {
+    try {
+        stage('Checkout') {
+            echo 'configure started'
+            git branch: '${BRANCH_NAME}', credentialsId: '1d02532d-670e-4f99-bf3f-dbb89dedfc4d', url: 'https://github.com/frtinc/sentinal_tms_user_mgnt_api.git'
+            echo 'configure done'
+        }
+        stage('Build Dev Image') {
+            if (isUnix()) {
+                // sh 'sudo -S true'
+                sh 'sudo docker-compose --project-name user_management build dev-app'
+            } else {
+                bat 'sudo docker-compose --project-name user_management build dev-app'
+            }
+        }
+
+        stage('Code coverage') {
+             if (isUnix()) {
+               //sh 'sudo docker-compose --project-name user_management run --rm dev-app npm run code_coverage'
+             }else {
+               //bat 'sudo docker-compose --project-name user_management run --rm dev-app npm run code_coverage'
+             }
+            //publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './coverage', reportFiles: 'index.html', reportName: 'Code Coverage', reportTitles: 'Code Coverage'])
+        }
+
+
+        // stage('Code Quality') {
+        //    if (isUnix()) {
+          //      sh 'sudo docker-compose --project-name user_management run --rm dev-app npm run code_quality'
+         //   } else {
+         //       bat 'sudo docker-compose --project-name user_management run --rm dev-app npm run code_quality'
+        //    }
+
+          //  publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './reports/plato', reportFiles: 'index.html', reportName: 'Code Quality', reportTitles: 'Code Quality'])
+         //   echo 'Code Quality ended'
+        //}
+        
+       stage('Build Prod Image') {
+            if (isUnix()) {
+               // sh 'sudo -S true'
+               sh 'sudo docker-compose run --rm dev-app npm run build'
+               sh 'sudo docker-compose build prod-app'
+            } else {
+               bat 'sudo docker-compose --project-name user_management run --rm dev-app npm run build'
+               bat 'sudo docker-compose --project-name user_management build prod-app'
+            }
+        }
+        
+       stage('Deliver') {
+           if (isUnix()) {
+               sh 'sudo docker push docker.pkg.github.com/frtinc/sentinal_tms_user_mgnt_api/qa:latest'
+           } else {
+               sh 'sudo docker push docker.pkg.github.com/frtinc/sentinal_tms_user_mgnt_api/qa:latest'
+           }
+       }
+
+   
+
+
+
+    }
+
+finally {
+    stage('Shutingdown Container') {
+        if (isUnix()) {
+            sh 'sudo docker-compose down'
+        } else {
+            bat 'sudo docker-compose down'
+        }
+
+    }
+
+}
+
+}
