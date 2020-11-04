@@ -29,7 +29,7 @@ services:
 
   dev-app:
     build: .
-    image: docker.pkg.github.com/frtinc/sentinal_tms_user_mgnt_api/qa:latest
+    image: docker.pkg.github.com/sivasushma/aws-build/qa:latest
     container_name: user_management_dev
     restart: always
     command: bash -c "./wait-for-it.sh --timeout=0 db:27017 && npm run start-dev"
@@ -56,7 +56,7 @@ services:
     build:
       context: .
       dockerfile: ./prod/Dockerfile
-    image: docker.pkg.github.com/frtinc/sentinal_tms_user_mgnt_api/qa:latest
+    image: docker.pkg.github.com/sivasushma/aws-build/qa:latest
     container_name: qa_user_management
     restart: always
     command: bash -c "./wait-for-it.sh --timeout=0 db:27017 && npm run start-prod"
